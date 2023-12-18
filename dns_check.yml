@@ -14,5 +14,5 @@
     - name: Store DNS records in a file
       copy:
         content: "{{ item.stdout_lines | join('\n') }}"
-        dest: "{{ playbook_dir }}/dns_records.txt"
+        dest: "/home/bahasuru/Documents/Ansible/dns_records.txt"
       with_items: "{{ dns_results.results }}"
