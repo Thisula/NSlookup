@@ -10,16 +10,13 @@
         - facebook.com
         - youtube.com
       register: dns_results
-      tasks:
-        - name: Debug individual DNS record
-          debug: msg="{{ item.stdout }}"
-        with_items: "{{ dns_results.results }}"
 
     - name: Store DNS records in a file
       copy:
         content: "{{ item.stdout_lines | join('\n') }}"
-        dest: "/home/bahasuru/Documents/Ansible/dns_records.txt"
+        dest: "{{ playbook_dir }}/dns_records.txt"
       with_items: "{{ dns_results.results }}"
+
 
     # - name: Retrieve DNS records for websites
     #   command: "nslookup {{ item }}"
