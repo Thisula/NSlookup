@@ -1,22 +1,22 @@
----
-- name: Check DNS Records
-  hosts: localhost
-  gather_facts: false
-  tasks:
-    - name: Retrieve DNS records for websites
-      command: "nslookup {{ item }}"
-      with_items:
-        - google.com
-        - facebook.com
-        - youtube.com
-      register: dns_results
+ ---
+# - name: Check DNS Records
+#   hosts: localhost
+#   gather_facts: false
+#   tasks:
+#     - name: Retrieve DNS records for websites
+#       command: "nslookup {{ item }}"
+#       with_items:
+#         - google.com
+#         - facebook.com
+#         - youtube.com
+#       register: dns_results
 
-    - name: Store DNS records in a file
-      copy:
-        content: "{{ item.stdout_lines | join('\n') }}"
-        #dest: "/home/bahasuru/Documents/Ansible/dns_records.txt"
-        dest: /var/log/ip_addresses.txt
-      with_items: "{{ dns_results.results }}"
+#     - name: Store DNS records in a file
+#       copy:
+#         content: "{{ item.stdout_lines | join('\n') }}"
+#         #dest: "/home/bahasuru/Documents/Ansible/dns_records.txt"
+#         dest: /var/log/ip_addresses.txt
+#       with_items: "{{ dns_results.results }}"
 
 # ---
 # - hosts: all
@@ -43,3 +43,12 @@
 #         facebook_ip: "{{ facebook_ip.get_addr }}"
 #         youtube_ip: "{{ youtube_ip.get_addr }}"
 
+- name: Retrieve DNS records for websites
+  command: "nslookup {{ item }}"
+  with_items:
+    - google.com
+    - facebook.com
+    - youtube.com
+  register: dns_results
+  debug: msg="{{ item.stdout }}"
+  with_items: "{{ dns_results.results }}"
