@@ -13,7 +13,7 @@ name: Check DNS Records
     - name: Store DNS records in a GitHub repository
       github_repository:
         repo: "Thisula/NSlookup.git"
-        token: "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"
+        token: "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"
         path: "dns_records.txt"
         content: "{{ item.stdout_lines | join('\n') }}"
       with_items: "{{ dns_results.results }}"
