@@ -10,7 +10,7 @@
         - facebook.com
         - youtube.com
       register: dns_results
-      debug: msg="{{ item.stdout }}"
+      # debug: msg="{{ item.stdout }}"
 
     - name: Store DNS records in a file
       copy:
