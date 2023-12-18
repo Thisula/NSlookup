@@ -1,8 +1,18 @@
- ---
-# - name: Check DNS Records
-#   hosts: localhost
-#   gather_facts: false
-#   tasks:
+---
+- name: Check DNS Records
+  hosts: localhost
+  gather_facts: false
+  tasks:
+      - name: Retrieve DNS records for websites
+        command: "nslookup {{ item }}"
+        with_items:
+          - google.com
+          - facebook.com
+          - youtube.com
+        register: dns_results
+        debug: msg="{{ item.stdout }}"
+        with_items: "{{ dns_results.results }}"
+       
 #     - name: Retrieve DNS records for websites
 #       command: "nslookup {{ item }}"
 #       with_items:
@@ -43,12 +53,3 @@
 #         facebook_ip: "{{ facebook_ip.get_addr }}"
 #         youtube_ip: "{{ youtube_ip.get_addr }}"
 
-- name: Retrieve DNS records for websites
-  command: "nslookup {{ item }}"
-  with_items:
-    - google.com
-    - facebook.com
-    - youtube.com
-  register: dns_results
-  debug: msg="{{ item.stdout }}"
-  with_items: "{{ dns_results.results }}"
