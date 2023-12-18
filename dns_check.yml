@@ -3,16 +3,30 @@
   hosts: localhost
   gather_facts: false
   tasks:
-      - name: Retrieve DNS records for websites
-        command: "nslookup {{ item }}"
-        with_items:
-          - google.com
-          - facebook.com
-          - youtube.com
-        register: dns_results
-        debug: msg="{{ item.stdout }}"
-        with_items: "{{ dns_results.results }}"
-       
+    - name: Retrieve DNS records for websites
+      command: "nslookup {{ item }}"
+      with_items:
+        - google.com
+        - facebook.com
+        - youtube.com
+      register: dns_results
+      debug: msg="{{ item.stdout }}"
+
+    - name: Store DNS records in a file
+      copy:
+        content: "{{ item.stdout_lines | join('\n') }}"
+        dest: "{{ playbook_dir }}/dns_records.txt"
+      with_items: "{{ dns_results.results }}"
+
+
+
+
+
+# ---
+# - name: Check DNS Records
+#   hosts: localhost
+#   gather_facts: false
+#   tasks:       
 #     - name: Retrieve DNS records for websites
 #       command: "nslookup {{ item }}"
 #       with_items:
