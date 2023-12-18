@@ -1,44 +1,45 @@
-# ---
-# - name: Check DNS Records
-#   hosts: localhost
-#   gather_facts: false
-#   tasks:
-#     - name: Retrieve DNS records for websites
-#       command: "nslookup {{ item }}"
-#       with_items:
-#         - google.com
-#         - facebook.com
-#         - youtube.com
-#       register: dns_results
-
-#     - name: Store DNS records in a file
-#       copy:
-#         content: "{{ item.stdout_lines | join('\n') }}"
-#         dest: "/home/bahasuru/Documents/Ansible/dns_records.txt"
-#       with_items: "{{ dns_results.results }}"
-
 ---
-- hosts: all
-  become: true
+- name: Check DNS Records
+  hosts: localhost
+  gather_facts: false
   tasks:
-    - name: Get Google IP address
-      nslookup:
-        hosts: google.com
-      register: google_ip
-    - name: Get Facebook IP address
-      nslookup:
-        hosts: facebook.com
-      register: facebook_ip
-    - name: Get YouTube IP address
-      nslookup:
-        hosts: youtube.com
-      register: youtube_ip
-    - name: Store IP addresses
-      template:
-        src: ip_addresses.j2
+    - name: Retrieve DNS records for websites
+      command: "nslookup {{ item }}"
+      with_items:
+        - google.com
+        - facebook.com
+        - youtube.com
+      register: dns_results
+
+    - name: Store DNS records in a file
+      copy:
+        content: "{{ item.stdout_lines | join('\n') }}"
+        #dest: "/home/bahasuru/Documents/Ansible/dns_records.txt"
         dest: /var/log/ip_addresses.txt
-      vars:
-        google_ip: "{{ google_ip.get_addr }}"
-        facebook_ip: "{{ facebook_ip.get_addr }}"
-        youtube_ip: "{{ youtube_ip.get_addr }}"
+      with_items: "{{ dns_results.results }}"
+
+# ---
+# - hosts: all
+#   become: true
+#   tasks:
+#     - name: Get Google IP address
+#       nslookup:
+#         hosts: google.com
+#       register: google_ip
+#     - name: Get Facebook IP address
+#       nslookup:
+#         hosts: facebook.com
+#       register: facebook_ip
+#     - name: Get YouTube IP address
+#       nslookup:
+#         hosts: youtube.com
+#       register: youtube_ip
+#     - name: Store IP addresses
+#       template:
+#         src: ip_addresses.j2
+#         dest: /var/log/ip_addresses.txt
+#       vars:
+#         google_ip: "{{ google_ip.get_addr }}"
+#         facebook_ip: "{{ facebook_ip.get_addr }}"
+#         youtube_ip: "{{ youtube_ip.get_addr }}"
 
